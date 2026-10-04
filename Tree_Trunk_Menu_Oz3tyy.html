@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7f3ed">
+<title>Tree Trunk — Menu</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f7f3ed;--paper:#fffdf9;--ink:#171717;--muted:#706c65;--line:#ded8cf;--accent:#c35a7e;--accent-soft:#f2dce4;--shadow:0 10px 35px rgba(28,24,18,.06)}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.45}
+button,input{font:inherit}button{cursor:pointer}
+.page{width:min(1120px,92%);margin:0 auto}
+.top{padding:26px 0 18px;border-bottom:1px solid var(--line)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-family:Georgia,"Times New Roman",serif;font-size:1.65rem;letter-spacing:-.03em;font-weight:700}
+.brand small{display:block;font-family:inherit;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:2px}
+.gift-btn{border:1px solid var(--line);background:var(--paper);padding:9px 13px;border-radius:999px;font-size:.83rem;font-weight:700;color:var(--ink);transition:.18s ease}
+.gift-btn:hover{transform:translateY(-1px);border-color:#cbbfb1}
+.headline{padding:38px 0 30px;text-align:center}
+.headline .eyebrow{text-transform:uppercase;letter-spacing:.24em;font-size:.68rem;color:var(--muted);font-weight:800;margin-bottom:11px}
+.headline h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(2.7rem,6vw,4.9rem);line-height:1;letter-spacing:-.05em}
+.headline p{max-width:650px;margin:13px auto 0;color:var(--muted);font-size:.96rem}
+.tools{position:sticky;top:0;z-index:20;padding:14px 0 12px;background:linear-gradient(var(--bg) 70%,rgba(247,243,237,0));backdrop-filter:blur(8px)}
+.search{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:rgba(255,253,249,.95);padding:12px 14px;border-radius:12px;box-shadow:var(--shadow)}
+.search span{color:#837d74;font-size:1.12rem}.search input{width:100%;border:0;outline:0;background:transparent;color:var(--ink);font-size:.92rem}
+.chips{display:flex;gap:7px;overflow:auto;padding:10px 0 2px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid var(--line);background:var(--paper);color:#47433e;padding:7px 11px;border-radius:999px;white-space:nowrap;font-size:.76rem;font-weight:700}
+.chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.menu{padding:8px 0 55px}.section{padding:26px 0 6px}
+.section-head{display:flex;align-items:center;gap:13px;margin-bottom:14px}
+.section-head h2{font-family:Georgia,"Times New Roman",serif;font-size:1.75rem;letter-spacing:-.03em;white-space:nowrap}
+.section-head .line{height:1px;background:var(--line);flex:1}.section-head .count{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);white-space:nowrap}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 38px}
+.item{padding:16px 4px 15px;border-bottom:1px solid rgba(222,216,207,.78);transition:background .18s ease}
+.item:hover{background:rgba(255,255,255,.35)}
+.item h3{font-family:Georgia,"Times New Roman",serif;font-size:1.13rem;line-height:1.2}.item p{margin-top:6px;color:var(--muted);font-size:.83rem;line-height:1.58}
+.empty{text-align:center;padding:75px 10px 100px;color:var(--muted)}.empty strong{display:block;font-family:Georgia,"Times New Roman",serif;font-size:1.7rem;color:var(--ink);margin:8px 0}
+footer{border-top:1px solid var(--line);padding:28px 0 46px;color:var(--muted);font-size:.76rem;text-align:center}
+/* The only birthday-focused element: a one-time present message. */
+.overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(18,16,14,.48);backdrop-filter:blur(7px);opacity:0;visibility:hidden;transition:.25s ease;padding:20px}
+.overlay.show{opacity:1;visibility:visible}
+.gift-modal{width:min(500px,100%);background:#fffdfa;border:1px solid rgba(255,255,255,.7);border-radius:24px;box-shadow:0 28px 90px rgba(0,0,0,.2);padding:35px 30px 27px;text-align:center;position:relative;overflow:hidden;transform:translateY(12px) scale(.98);transition:.28s ease}
+.overlay.show .gift-modal{transform:none}
+.modal-close{position:absolute;top:10px;right:12px;width:34px;height:34px;border-radius:50%;border:0;background:#f1ece5;color:#534e48;font-size:1.25rem}
+.ribbon{width:72px;height:72px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);font-size:2rem}
+.modal-kicker{text-transform:uppercase;letter-spacing:.22em;font-size:.63rem;color:var(--accent);font-weight:800}
+.gift-modal h2{font-family:Georgia,"Times New Roman",serif;font-size:2.7rem;line-height:1;letter-spacing:-.04em;margin:10px 0 12px}
+.gift-modal p{color:var(--muted);font-size:.96rem;line-height:1.75;max-width:410px;margin:0 auto}
+.note{margin:17px auto 20px;padding:12px 15px;max-width:390px;background:#fbf2f5;border-radius:12px;color:#694354;font-size:.84rem}
+.open-btn{border:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:999px;font-weight:800;font-size:.84rem}
+@media (max-width:780px){.items{grid-template-columns:1fr;gap:0}.section-head h2{font-size:1.55rem}}
+@media (max-width:520px){.page{width:min(94%,1120px)}.top{padding-top:18px}.headline{padding:30px 0 22px}.headline h1{font-size:2.75rem}.section-head{gap:9px}.section-head .line{min-width:20px}.gift-modal{padding:31px 21px 23px}.gift-modal h2{font-size:2.35rem}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">Tree Trunk<small>restaurant menu</small></div>
+      <button class="gift-btn" id="giftBtn" type="button">A little surprise</button>
+    </div>
+    <div class="headline">
+      <div class="eyebrow">today's selection</div>
+      <h1>Our Menu</h1>
+      <p>Take your time, find your favorite, and enjoy the table.</p>
+    </div>
+  </div>
+</header>
+
+<main class="page menu">
+  <div class="tools">
+    <div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search the menu…" autocomplete="off" aria-label="Search menu"></div>
+    <div class="chips" id="categoryChips"></div>
+  </div>
+  <section id="menuGrid"></section>
+  <div id="emptyState" class="empty" hidden><div style="font-size:2rem">♡</div><strong>Nothing found</strong><span>Try another search.</span></div>
+</main>
+
+<footer><div class="page">Tree Trunk · Enjoy your meal.</div></footer>
+
+<div class="overlay" id="birthdayOverlay" aria-hidden="true">
+  <div class="gift-modal" role="dialog" aria-modal="true" aria-labelledby="giftTitle">
+    <button class="modal-close" id="closeGift" type="button" aria-label="Close">×</button>
+    <div class="ribbon">🎁</div>
+    <div class="modal-kicker">Just one little thing before you order</div>
+    <h2 id="giftTitle">Happy Birthday, Oz3tyy! ♡</h2>
+    <p>The menu looks normal… but this table has a secret. Today isn't only about choosing something delicious — it's about celebrating <strong>you</strong>.</p>
+    <div class="note">May this new chapter be softer, louder, happier, and filled with the kind of moments you wish could last a little longer. ✨</div>
+    <button class="open-btn" id="continueBtn" type="button">Alright, show me the menu</button>
+  </div>
+</div>
+
+<script>
+const menu = {"Egyptian Breakfast": [["Foul", "Foul styles: spicy / butter / Alexandria style"], ["Salad", ""], ["Chips", ""], ["Bread (extra)", ""], ["Eggplant", ""], ["Taamia – 3 pcs", ""], ["Cheese Tomato", ""], ["Boiled Eggs – 3 pcs", ""], ["Fresh Rocca & onions", ""], ["Fried egg with ghee – 3 pcs", ""]], "Breakfast": [["Breakfast Quesadillas", "Fried scrambled eggs with vegetables and cheese on toasted tortilla bread."], ["Omlette and Rocca", "Fluffy omelet with vegetables & cheese, served with fresh rocca and bread."], ["Scrambled Eggs", "Golden fluffy eggs with crispy potato chips, baby spinach, and cherry tomatoes."], ["Spinach Omelette", "Fluffy scrambled eggs with crispy potato chips and a refreshing garden salad."], ["Special Shakshuka", "Eggs with tomato sauce, onions, and parsley baked in the oven. Add taamia available."]], "Salads": [["Chicken Caesar Salad", "Grilled chicken tenderloins, lettuce, cheddar cheese, croutons, and Caesar dressing."], ["Rocca Salad", "Rocket leaves, lemon dressing, sun-dried tomatoes, fresh mushrooms, cheddar, and walnuts."]], "Sandwiches": [["Beef Tacos", "Shredded beef, lettuce, onions, jalapeños, and our special sauce."], ["Chicken Tacos", "Crunchy lettuce, pico de gallo, shredded chicken in buffalo sauce, melted cheese, and jalapeños."], ["Shrimp Tacos", "Grilled or fried shrimp, lettuce, onions, jalapeños, and our special sauce."], ["Crispy Burger", "Crispy golden-fried chicken in a soft toasted bun with fresh lettuce and creamy sauce."], ["BBQ Chicken Quesadilla", "Grilled flour tortillas stuffed with tender BBQ chicken, cheddar cheese, caramelized onions, and fresh herbs."]], "Appetizers": [["Crispy Shrimp", "Golden-fried shrimp coated in a glossy sweet-and-spicy sauce, served over fresh greens."], ["Chicken Tenders", "Golden crispy chicken tenders with a crunchy outside and juicy, tender chicken inside."], ["Hawawshi & Chips", "Traditional Egyptian hawawshi with a crispy crust, spiced minced meat and herbs, served with potato chips."], ["Nachos", "Tortilla nacho chips with tomato bolognese, pico de gallo, sour cream, jalapeños, and cheesy sauce."], ["Sweet Potato Fries", "Crispy golden sweet potato fries with a naturally sweet flavor and satisfying crunch."], ["Potato Wedges", "Thick-cut potato wedges seasoned with spices and herbs, fried until golden and crispy, with ketchup."], ["French Fries", "Golden fries, crispy outside and soft and fluffy inside."]], "Pizza": [["Margherita", "Classic tomato sauce, melted mozzarella, fresh basil, and a drizzle of olive oil on a golden crispy crust."], ["Chicken Ranch", "Juicy chicken, creamy ranch sauce, and mozzarella cheese on a perfectly baked crust."]], "Main Courses": [["Juicy Lucy Burger", "Juicy cheeseburger with melted cheddar, crispy fries, fresh salad, and BBQ dip."], ["Chicken Mushroom Alfredo", "Fettuccine pasta in creamy brown mushroom sauce with grilled marinated chicken."], ["Shrimp Rigatoni", "Al dente rigatoni in rich creamy sauce with seared shrimp, fresh herbs, and tender vegetables."], ["Beef Stroganoff", "Tender beef strips in creamy mushroom sauce with herbs and a touch of spice, served with white rice."], ["Chicken Mushroom", "Tender chicken breast in rich brown mushroom sauce, served with rice and crispy fries."], ["Chicken Lemon Garlic", "Grilled chicken marinated with lemon and garlic, served with lemon sauce."], ["Beef Fillet", "Grilled beef steak with crispy potato wedges and garden salad topped with mushrooms, walnuts, sun-dried tomatoes, and cheese."], ["Salmon Steak", "Seared salmon with roasted seasonal vegetables, fresh herbs, and lemon."], ["Cordon Bleu", "Breaded chicken stuffed with fresh turkey & Swiss cheese."]], "Vegetarian Main Courses": [["Vegetarian Burger", "Vegetarian burger patty topped with onions, tomatoes & lettuce, served with sweet potato fries."], ["Vegi Salad", "Quinoa, crisp cucumbers, cherry tomatoes, sweet corn, bell peppers, fresh mint, and light dressing."], ["Halloumi Wrap", "Cherry honey-glazed halloumi cheese with sun-dried tomato and rocca."], ["Halloumi Cheese", "Crispy outside, soft and salty inside."]], "Desserts": [["Plain Cheesecake", ""], ["Raspberry Cheesecake", ""], ["Chocolate Brownies Icecream", ""], ["Signature Mille-Feuille", ""], ["French Toast", ""], ["Tiramisu", ""], ["Red Velvet Cake", ""], ["Crème Brulée", ""], ["Banoffee Pie", ""], ["Tres Leche", ""], ["Hot Chocolate Cake", ""]], "Coffee": [["Espresso", "Available in the listed sizes."], ["Espresso Americano", "Available in the listed sizes."], ["Latte", ""], ["Spanish Latte", ""], ["Mocha", ""], ["Turkish Coffee", ""], ["French Coffee", ""]], "Ice Coffee": [["Iced Americano", ""], ["Iced Latte", ""], ["Iced Mocha", ""], ["Iced Caramel Frappe", ""], ["Iced Caramel Latte", ""], ["Iced Caramel Macchiato", ""], ["Iced White Mocha Frappe", ""], ["Iced Spanish Latte", ""]], "Beverages": [["Fresh Juice", "Mango • Strawberry • Lemon Mint"], ["Smoothies", "Lemonmint • Watermelon • Passionfruit • Blueberry • Mango • Pink Lemonade"], ["Milkshakes", "Vanilla • Chocolate • Blueberry • Strawberry"], ["Mojito", "Classic • Blueberry • Passionfruit"], ["Hot Drinks", "Tea • Anis"], ["Soft Drinks", "Water • Sparkling Water • Soda • V Cola • Redbull"]], "Add Ons & Extras": [["Espresso Shots", "Double shot standard / additional espresso shot."], ["Choose Your Milk", "Regular milk • Skimmed milk • Almond milk • Oat milk • Coconut milk"], ["Add Your Syrup", "Caramel syrup • Hazelnut syrup • Honey • Vanilla syrup"]], "Barad Tea": [["Barad Tea", "Authentic black tea served in traditional tulip-shaped glasses with a brass teapot and fresh mint."]]};
+const grid=document.getElementById("menuGrid"),chips=document.getElementById("categoryChips"),searchInput=document.getElementById("searchInput"),emptyState=document.getElementById("emptyState");
+let activeCategory="All";
+const categories=Object.keys(menu);
+
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
+function normalize(v){return String(v).toLowerCase().normalize("NFKD").replace(/[^\w\s]/g," ")}
+function renderChips(){chips.innerHTML=["All",...categories].map(c=>`<button class="chip ${c===activeCategory?"active":""}" type="button" data-category="${esc(c)}">${esc(c)}</button>`).join("")}
+function renderMenu(){
+  const q=normalize(searchInput.value.trim()),parts=[];let visible=0;
+  for(const [category,items] of Object.entries(menu)){
+    if(activeCategory!=="All"&&activeCategory!==category)continue;
+    const filtered=items.filter(([name,desc])=>!q||normalize(name+" "+desc+" "+category).includes(q));
+    if(!filtered.length)continue;
+    visible+=filtered.length;
+    parts.push(`<section class="section"><div class="section-head"><h2>${esc(category)}</h2><div class="line"></div><div class="count">${filtered.length} ${filtered.length===1?"item":"items"}</div></div><div class="items">${filtered.map(([name,desc])=>`<article class="item"><h3>${esc(name)}</h3>${desc?`<p>${esc(desc)}</p>`:""}</article>`).join("")}</div></section>`);
+  }
+  grid.innerHTML=parts.join("");emptyState.hidden=visible!==0;
+}
+chips.addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;activeCategory=b.dataset.category;renderChips();renderMenu()});
+let searchTimer;searchInput.addEventListener("input",()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderMenu,80)});
+
+const overlay=document.getElementById("birthdayOverlay"),closeGift=document.getElementById("closeGift"),continueBtn=document.getElementById("continueBtn"),giftBtn=document.getElementById("giftBtn");
+function showGift(){overlay.classList.add("show");overlay.setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
+function hideGift(){overlay.classList.remove("show");overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";try{localStorage.setItem("oz3tyyBirthdaySeen","1")}catch(e){}}
+closeGift.addEventListener("click",hideGift);continueBtn.addEventListener("click",hideGift);
+overlay.addEventListener("click",e=>{if(e.target===overlay)hideGift()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("show"))hideGift()});
+giftBtn.addEventListener("click",showGift);
+
+renderChips();renderMenu();
+try{if(localStorage.getItem("oz3tyyBirthdaySeen")!=="1")setTimeout(showGift,900)}catch(e){setTimeout(showGift,900)}
+</script>
+</body>
+</html>
